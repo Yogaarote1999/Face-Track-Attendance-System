@@ -1,0 +1,163 @@
+# FaceTrack – AI Powered Face Recognition Attendance System
+
+A smart and secure **Face Recognition Attendance System** built using:
+
+- Python 3.10  
+- Flask Framework  
+- PyTorch + FaceNet  
+- MTCNN (Face Detection)  
+- SQLite Database  
+
+- OpenCV  
+- Dlib  
+- Pandas & Excel Export
+
+This system allows students to log attendance using **real-time face recognition**, and provides an **admin dashboard** for managing records, downloading reports, viewing attendance calendars, and more.
+
+---
+
+## 🚀 Features
+
+### 🔵 Student Features
+- Face-based registration  
+- Real-time camera capture  
+- Automatic attendance marking  
+- Prevents duplicate attendance  
+- Auto logout after marking attendance  
+
+### 🔴 Admin Features
+- View all students  
+- View and manage attendance  
+- Delete or edit student details  
+- Monthly attendance calendar  
+- Download full attendance in Excel  
+- View present/absent days  
+- Complete reporting dashboard  
+
+### 🟢 Technical Features
+- Face Embedding using **FaceNet (InceptionResnetV1)**  
+- Face Detection using **MTCNN**  
+- SQLite lightweight database  
+- Embedding storage using Pickle  
+- CSV and Excel file generation  
+- Secure Login Authentication  
+
+---
+
+## 📁 Project Structure
+face_attendance_system/
+│
+├── app.py # Main Flask application
+├── requirements.txt # All dependencies
+├── README.md # Project documentation
+│
+├── models/
+│ ├── facenet_model.pth
+│ ├── embeddings.pkl
+│ ├── attendance_model.pkl
+│ ├── face_recognition_model-weights_manifest.json
+│ └── dlib-19.24.1-cp310-cp310-win_amd64.whl
+│
+├── database/
+│ └── users.db
+│
+├── faces/
+│ └── <email>/
+│ └── captured_faces.jpg
+│
+├── attendance/
+│ └── attendance_log.csv
+│
+├── static/
+│ ├── css/style.css
+│ ├── js/main.js
+│ ├── uploads/
+│ └── images/logo.png
+│
+└── templates/
+├── login.html
+├── register.html
+├── dashboard.html
+├── admin.html
+├── students.html
+├── attendance_report.html
+├── attendance_count.html
+└── attendance_calendar.html 
+
+---
+
+## 🛠 Installation
+
+### 1️⃣ Install Python 3.10  
+Download from: https://www.python.org/downloads/release/python-3100/
+
+### 2️⃣ Install dependencies  
+
+### 3️⃣ Install Dlib (if needed manually)
+
+### 4️⃣ Run the server
+
+---
+
+## 🎥 How Attendance Works
+
+1. Student logs in  
+2. Camera opens  
+3. System detects face using **MTCNN**  
+4. System extracts embedding using **FaceNet**  
+5. Compares with stored embedding  
+6. If match ≥ threshold → Attendance marked  
+7. Image saved in uploads folder  
+8. CSV updated for students  
+
+---
+
+## 🔐 Security Measures
+
+- Password hashing (Werkzeug)  
+- Admin restricted routes  
+- Face similarity threshold  
+- Duplicate attendance prevention  
+- Session management  
+
+---
+
+## 📊 Admin Panel Contains
+
+- Students list  
+- Attendance table  
+- Daily/Monthly reports  
+- Excel download  
+- Calendar-based attendance  
+- Delete/edit student  
+
+---
+
+## ✨ Technologies Used
+
+| Component | Technology |
+|----------|------------|
+| Backend | Flask, Python |
+| Frontend | HTML, CSS, JS |
+| Face Detection | MTCNN |
+| Face Recognition | FaceNet (PyTorch) |
+| Database | SQLite |
+| Exports | CSV, Excel (Openpyxl) |
+
+---
+
+## 👨‍💻 Developer
+
+
+FaceTrack – AI Attendance System  
+© pravarainfotech.in  
+
+---
+generate text file  
+
+
+
+
+
+
+

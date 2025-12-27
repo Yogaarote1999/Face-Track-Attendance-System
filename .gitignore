@@ -1,0 +1,9 @@
+*.pth
+*.pkl
+*.json
+*.whl
+users.db
+uploads/
+faces/
+lfw-deepfunneled/
+*.xlsx

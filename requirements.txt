@@ -1,0 +1,28 @@
+# Python Version
+python==3.10
+
+# Flask Framework
+Flask==2.3.2
+Flask-Cors==3.0.10
+Werkzeug==2.3.2
+
+# Face Recognition (Deep Learning)
+torch==2.0.1
+torchvision==0.15.2
+facenet-pytorch==2.5.3
+numpy==1.24.3
+Pillow==9.5.0
+opencv-python==4.7.0.72
+
+# dlib (local wheel file)
+dlib @ file:///C:/Users/om%20sai%20ram/Downloads/dlib-19.24.1-cp310-cp310-win_amd64.whl
+
+# Excel / CSV
+pandas==1.5.3
+openpyxl==3.1.2
+
+# Security
+itsdangerous==2.1.2
+
+# Utilities
+pathlib==1.0.1
