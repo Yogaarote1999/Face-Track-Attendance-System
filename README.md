@@ -79,30 +79,34 @@ Feel free to fork, enhance, and submit pull requests.
 
 ## Screenshots
 
-### Dashboard
-![Dashboard]([Dashboard]Screenshot%20(9).png)
+## Screenshots
 
 ### Login Page
-![Login Page]([Login%20Page]Screenshot%20(2).png)
+![Login](Screenshots/Login%20Page%20page.png)
 
 ### Registration Page
-![Registration Page]([Registration%20Page]Screenshot%20(3).png)
+![Register](Screenshots/Registration%20Page%20page.png)
 
-### Student Management Panel
-![Student Management Panel]([Student%20Management%20panel]Screenshot%20(5).png)
-
-### Attendance Report
-![Attendance Report]([Attendance%20Report]Screenshot%20(6).png)
-
-### Attendance Calendar
-![Attendance Calendar]([Attendance%20Calender]Screenshot%20(8).png)
-
-### Attendance Count
-![Attendance Count]([Attendance%20Count]Screenshot%20(7).png)
+### Dashboard
+![Dashboard](Screenshots/Dashboard%20page.png)
 
 ### Admin Attendance Panel
-![Admin Panel]([Admin%20Attendace%20Panel]Screenshot%20(4).png)
+![Admin Panel](Screenshots/Admin%20Panel%20page.png)
+
+### Student Management Panel
+![Student Panel](Screenshots/Student%20Management%20Panel%20page.png)
+
+### Attendance Calendar
+![Calendar](Screenshots/Attendance%20Calendar%20Page.png)
+
+### Attendance Count
+![Count](Screenshots/Attendance%20Count%20page.png)
+
+### Attendance Report
+![Report](Screenshots/Attendance%20Report%20page.png)
 
 ### Edit Student
-![Edit Student]([Edit%20Student]Screenshot%20(1).png)
+![Edit Student](Screenshots/Edit%20Student%20page.png)
+
+
 
