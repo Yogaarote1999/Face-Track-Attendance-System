@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register - Face Attendance</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* -------- BACKGROUND + NO SCROLL -------- */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(120deg,#7d2ae8,#4a00e0,#a855f7);
+  background-size: cover;
+  background-position: center;
+
+  height: 100vh;          /* ⭐ Full screen */
+  overflow: hidden;       /* ⭐ No scrolling */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* -------- CARD -------- */
+.card {
+  width: 780px;
+  height: 470px;
+  padding: 20px 30px;
+
+  background: rgba(255,255,255,0.14);
+  border-radius: 18px;
+  backdrop-filter: blur(22px);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 0 30px rgba(0,0,0,0.28);
+
+  color: white;
+  text-align: center;
+  animation: floatUp 0.8s ease-out;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Animation */
+@keyframes floatUp {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 10px;
+  font-size: 14px;
+  outline: none;
+  background: rgba(255,255,255,0.19);
+  color: white;
+}
+input::placeholder { color: #e9d9ff; }
+
+/* Capture Button */
+#captureBtn {
+  padding: 10px;
+  font-size: 14px;
+  background: linear-gradient(90deg,#e100ff,#7d2ae8);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+}
+#captureBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+}
+
+/* Submit Button – SMALLER */
+.submit-btn {
+  width: 200px;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg,#e100ff,#7d2ae8);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+}
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+}
+
+/* Single-line text */
+.no-wrap {
+  white-space: nowrap;
+}
+
+/* Error Text */
+#errorMsg {
+  color:#ffcdcd;
+  font-weight:500;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2 style="margin-top:10px; font-weight:500;">Create Account</h2>
+  <p style="opacity:0.9; margin-top:-8px;">Face recognition powered registration</p>
+
+  {% if error %}<p id="errorMsg">{{ error }}</p>{% endif %}
+
+  <!-- LEFT CAMERA + RIGHT FORM -->
+  <div style="display:flex; gap:0px; margin-top:10px; align-items:flex-start;">
+
+      <!-- LEFT: CAMERA -->
+      <div style="text-align:center;">
+          <video id="regVideo" width="300" height="225" autoplay muted
+              style="border:3px solid rgba(255,255,255,0.55); border-radius:12px;">
+          </video>
+
+          <canvas id="regCanvas" width="300" height="225" style="display:none;"></canvas>
+
+          <button id="captureBtn" style="width:300px; margin-top:8px;">
+              Capture Face
+          </button>
+
+          <span id="captureStatus" 
+                style="display:block;margin-top:4px;font-size:13px;"></span>
+      </div>
+
+      <!-- RIGHT: FORM (SHIFTED LEFT) -->
+      <form id="regForm" method="POST" enctype="multipart/form-data" 
+            style="width:700px; margin-left:-5px;">
+
+          <input type="text" name="username" placeholder="Full Name" required>
+          <input type="email" name="email" placeholder="Email Address" required>
+          <input type="password" name="password" placeholder="Create Password" required>
+
+          <button type="submit" class="submit-btn" style="
+             width: 260px;
+             padding: 12px;
+             font-size: 16px;
+             margin-top: 14px;
+">
+             Complete Registration
+          </button>
+
+
+          <p class="no-wrap" style="margin-top:8px;">
+              Already have an account? <a href="/login">Login</a>
+          </p>
+      </form>
+  </div>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+const video = document.getElementById('regVideo');
+const canvas = document.getElementById('regCanvas');
+const captureBtn = document.getElementById('captureBtn');
+const captureStatus = document.getElementById('captureStatus');
+const regForm = document.getElementById('regForm');
+let capturedBlob = null;
+
+// Start camera
+function startCamera() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => { video.srcObject = stream; })
+    .catch(() => {
+        captureStatus.innerText = "Camera blocked or unavailable!";
+        captureStatus.style.color = "#ffb3b3";
+    });
+}
+startCamera();
+
+// Capture face
+captureBtn.addEventListener('click', () => {
+    if (captureBtn.innerText === "Retake Face") {
+        capturedBlob = null;
+        captureStatus.innerText = "Please capture again";
+        captureStatus.style.color = "#ffd86b";
+        captureBtn.innerText = "Capture Face";
+        startCamera();
+        return;
+    }
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    canvas.toBlob(blob => {
+        capturedBlob = blob;
+        captureStatus.innerText = "✓ Face captured";
+        captureStatus.style.color = "#90ff9d";
+        captureBtn.innerText = "Retake Face";
+    }, "image/jpeg", 0.92);
+});
+
+// Submit form
+regForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    if (!capturedBlob) {
+        alert("Please capture your face before registering!");
+        return;
+    }
+
+    const f = new FormData();
+    f.append("username", this.username.value);
+    f.append("email", this.email.value);
+    f.append("password", this.password.value);
+    f.append("face_image", capturedBlob, "face.jpg");
+
+    fetch("/register", { method: "POST", body: f })
+    .then(res => {
+        if (res.redirected) window.location.href = res.url;
+        else res.text().then(txt => { document.body.innerHTML = txt; });
+    })
+    .catch(err => alert("Registration failed: " + err));
+});
+</script>
+
+<!-- FOOTER -->
+<footer style="
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 13px;
+">
+    © <a href="https://www.pravarainfotech.in/" 
+         target="_blank"
+         style="color: #ffd6ff; text-decoration:none; font-weight:600;">
+        pravarainfotech.in
+    </a>
+</footer>
+
+</body>
+</html>

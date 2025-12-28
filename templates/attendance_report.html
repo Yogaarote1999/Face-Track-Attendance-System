@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Attendance Report</title>
+<style>
+body { font-family: Arial; background:#f6f1ff; padding:20px; }
+h1 { color:#6a0dad; }
+table { width:100%; border-collapse: collapse; margin-top:15px; }
+th, td { border:1px solid #ccc; padding:10px; }
+img { width:70px; height:70px; border-radius:6px; object-fit:cover; }
+</style>
+</head>
+<body>
+
+<h1>Attendance Report – {{ email }}</h1>
+<a href="/students">⬅ Back</a> | <a href="/logout">Logout</a>
+
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Time</th>
+<th>Captured Image</th>
+</tr>
+</thead>
+<tbody>
+{% for r in records %}
+<tr>
+<td>{{ r.date }}</td>
+<td>{{ r.time }}</td>
+<td><img src="/static/uploads/{{ r.image }}"></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<!-- FOOTER -->
+<footer style="
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 13px;
+">
+    © <a href="https://www.pravarainfotech.in/" 
+         target="_blank"
+         style="color: #410e41; text-decoration:none; font-weight:600;">
+        pravarainfotech.in
+    </a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login - Face Attendance</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+
+<style>
+body {
+  margin: 0;
+  font-family: Poppins, sans-serif;
+  background: linear-gradient(135deg, #7d2ae8, #4a00e0);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  background: rgba(255,255,255,0.13);
+  backdrop-filter: blur(12px);
+  padding: 35px 40px;
+  width: 360px;
+  border-radius: 18px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 0 18px rgba(0,0,0,0.25);
+}
+
+.card h2 {
+  color: #fff;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+.card input {
+  width: 100%;
+  padding: 11px;
+  margin: 7px 0;
+  border-radius: 7px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+
+.card button {
+  width: 100%;
+  margin-top: 12px;
+  background: #9b4dff;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 7px;
+  color: white;
+  cursor: pointer;
+  transition: 0.32s;
+}
+
+.card button:hover {
+  background: #4c1f86;
+  transform: translateY(-2px);
+}
+
+.card a {
+  color: #022d3a;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: #c75858;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+  <h2>Login</h2>
+
+  {% if error %}
+    <p class="error">{{ error }}</p>
+  {% endif %}
+
+  <form method="POST">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+
+  <p style="margin-top: 16px; color:#fff;">
+    Don't have an account? <a href="/register">Register</a>
+  </p>
+</div>
+<!-- FOOTER -->
+<footer style="
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 13px;
+">
+    © <a href="https://www.pravarainfotech.in/" 
+         target="_blank"
+         style="color: #ffd6ff; text-decoration:none; font-weight:600;">
+        pravarainfotech.in
+    </a>
+</footer>
+
+</body>
+</html>

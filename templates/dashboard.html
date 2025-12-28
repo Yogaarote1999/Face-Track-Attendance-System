@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard - Face Attendance</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ====== SAME STYLES (NO CHANGE) ====== */
+body {
+  font-family: Poppins, sans-serif;
+  background: radial-gradient(circle at top, #8e2de2 0, #4a00e0 40%, #120024 100%);
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 80vh;
+   overflow: hidden; 
+}
+.page { width: 100%; max-width: 1000px; padding: 30px 16px 120px; }
+
+.card { background: rgba(15, 15, 35, 0.85); border-radius: 18px; padding: 20px 20px 15px; box-shadow: 0 18px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.12); 
+        height: 780px;           /* ⭐ NEW: fixed height */
+        overflow: hidden;        /* ⭐ prevents scroll inside card */
+        position: relative; 
+        padding-bottom: 100px;
+        margin-bottom: 100px; 
+      }
+.header-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; }
+.header-row h2 { margin: 0; font-size: 24px; font-weight: 600; }
+.badge { background: linear-gradient(135deg,#ffb347,#ff6a88); padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 500; }
+.subtext { margin: 4px 0 10px; font-size: 14px; opacity: 0.85; }
+
+.video-wrap { position: relative;  width: 525px ;height: 400px;overflow: hidden;margin-left:0;margin-top: 10px;
+ border-radius: 12px; border: 4px solid #ff3d7f; box-shadow: 0 0 25px rgba(255,0,74,0.7); }
+
+.video-wrap.success-border { border-color: #11b867; box-shadow: 0 0 25px rgba(6, 228, 121, 0.7); }
+.video-wrap.error-border { border-color: #e42424; box-shadow: 0 0 25px rgba(255, 66, 101, 0.8); }
+
+video{width:100%;height:100%;object-fit:cover;border-radius: 12px;display: block;}
+
+.overlay-clock { position: absolute; left: 14px; top: 14px; background: rgba(0,0,0,0.55); color: #fff; padding: 7px 13px; border-radius: 10px; font-weight: 500; font-size: 14px; box-shadow: 0 0 10px rgba(0,0,0,0.65); }
+#status { margin-top: 18px; font-size: 17px; min-height: 24px; }
+#progressWrap { width: 60%; max-width: 520px; height: 6px; border-radius: 999px; margin: 14px auto 0; background: rgba(255,255,255,0.15); overflow: hidden; display: none; }
+#progressBar { width: 100%; height: 100%; background: linear-gradient(90deg,#ff9a9e,#fad0c4,#a18cd1,#fbc2eb); background-size: 300% 100%; animation: loadAnim 1.2s linear infinite; }
+@keyframes loadAnim { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+.success-box { margin-top: 18px; font-size: 22px; font-weight: 700; color: #00ff84; display: flex; justify-content: center; align-items: center; gap: 12px; animation: zoomIn 0.5s ease-in-out; }
+.success-box .check { font-size: 38px; animation: jump 0.8s infinite; }
+@keyframes jump { 0% { transform: translateY(0); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
+@keyframes zoomIn { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+#retryBtn { margin-top: 12px; margin-bottom: 150px; padding: 9px 18px; border-radius: 999px; border: none; font-size: 14px; cursor: pointer; background: #ff4b6b; color: #fff; font-weight: 500; display: none; }
+#toast { position: fixed; right: 18px; bottom: 18px; background: rgba(0,0,0,0.85); color: #fff; padding: 10px 14px; border-radius: 10px; font-size: 13px; opacity: 0; transform: translateY(25px); pointer-events: none; transition: 0.3s; min-width: 220px; }
+#toast.show { opacity: 1; transform: translateY(0); }
+#celebrationGif { position: fixed; left: 50%; top: 18%; transform: translateX(-50%); width: 260px; display: none; pointer-events: none; }
+@media (max-width: 720px) { video { width: 100%; height: auto; } }
+</style>
+</head>
+
+<body>
+<div class="page">
+  <div class="card">
+
+    <div class="header-row">
+      <h2>Welcome, {{ username }}</h2>
+      {% if is_admin %}
+      <span class="badge">Admin Mode</span>
+      {% else %}
+      <span class="badge">Student Mode</span>
+      {% endif %}
+    </div>
+
+    {% if is_admin %}
+      <p class="subtext">You are logged in as Admin — camera disabled.</p>
+      <a href="/admin"><button style="padding:10px 22px; border-radius:999px; border:none; background:#9b4dff; color:#fff;">Open Admin Panel</button></a>
+      <a href="/logout"><button style="padding:10px 22px; border-radius:999px; border:none; background:#ff4b6b; color:#fff;">Logout</button></a>
+
+    {% else %}
+      <p class="subtext">Please face the camera. Attendance will mark automatically.</p>
+
+      <div class="video-wrap" id="videoWrap">
+        <video id="video" autoplay muted></video>
+        <div class="overlay-clock" id="clockOverlay">Loading...</div>
+      </div>
+
+      <div id="status">Initializing camera...</div>
+      <div id="progressWrap"><div id="progressBar"></div></div>
+      <button id="retryBtn">Try Again</button>
+
+    {% endif %}
+  </div>
+</div>
+
+<img id="celebrationGif" src="https://media.tenor.com/2roX3uxz_68AAAAC/celebrate.gif">
+<div id="toast"></div>
+<audio id="successSound"><source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b5b97e6ce0.mp3?filename=correct-2-46134.mp3" type="audio/mpeg"></audio>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+{% if not is_admin %}
+<script>
+// CLOCK
+setInterval(() => {
+  document.getElementById("clockOverlay").innerText =
+    new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString();
+}, 1000);
+
+const video = document.getElementById("video");
+const statusText = document.getElementById("status");
+const retryBtn = document.getElementById("retryBtn");
+const videoWrap = document.getElementById("videoWrap");
+const progressWrap = document.getElementById("progressWrap");
+const toast = document.getElementById("toast");
+const celebrationGif = document.getElementById("celebrationGif");
+
+// CAMERA
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(s => { video.srcObject = s; statusText.innerText = "Camera ready..."; })
+  .catch(() => statusText.innerText = "Cannot access webcam");
+
+// 🌟 FAST CAPTURE BOOSTER (Inserted as requested)
+function startCaptureFast() {
+  let attempts = 0;
+  let timer = setInterval(() => {
+    attempts++;
+    if (video.readyState >= 2) {
+      clearInterval(timer);
+      captureAndSendOnce();
+    }
+    if (attempts === 18) {
+      clearInterval(timer);
+      statusText.innerText = "Camera slow — click Try Again";
+      retryBtn.style.display = "inline-block";
+    }
+  }, 180);
+}
+startCaptureFast();
+// END BOOSTER
+
+function showToast(msg) {
+  toast.innerText = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3500);
+}
+
+// CAPTURE
+async function captureAndSendOnce() {
+  videoWrap.classList.remove("success-border","error-border");
+  retryBtn.style.display = "none";
+  progressWrap.style.display = "block";
+
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext("2d").drawImage(video, 0, 0);
+
+  canvas.toBlob(async b => {
+    const form = new FormData();
+    form.append("face_image", b, "capture.jpg");
+
+    try {
+      const r = await fetch("/capture", { method:"POST", body: form });
+      const data = await r.json();
+      progressWrap.style.display = "none";
+
+      if (data.status === "marked") {
+        document.getElementById("successSound").play();
+        videoWrap.classList.add("success-border");
+        celebrationGif.style.display = "block";
+        setTimeout(()=> celebrationGif.style.display="none", 2600);
+        confetti({particleCount:200, spread:100, startVelocity:70, origin:{y:0.6}});
+        statusText.innerHTML = `<div class="success-box"><span class="check">✔</span>
+          Attendance marked successfully <b>${data.username}</b> — Have a nice day 🌟</div>`;
+        showToast(`Attendance marked at ${data.date} ${data.time}`);
+        speechSynthesis.speak(new SpeechSynthesisUtterance(
+          `Attendance marked successfully ${data.username}, have a nice day`
+        ));
+        setTimeout(()=> window.location.href = data.redirect || "/logout", 4600);
+        return;
+      }
+
+      if (data.status === "already") {
+        statusText.innerText = "✔ Attendance already marked today";
+        showToast(`Already marked at ${data.date} ${data.time}`);
+        setTimeout(()=> window.location.href = data.redirect || "/logout", 3200);
+        return;
+      }
+
+      if (data.status === "face_mismatch" || data.status === "no_face") {
+        videoWrap.classList.add("error-border");
+        retryBtn.style.display = "inline-block";
+        statusText.innerText = "⚠ Face error — please try again";
+        speechSynthesis.speak(new SpeechSynthesisUtterance("Face not recognised, please try again"));
+        return;
+      }
+
+      statusText.innerText = "⚠ Error";
+      setTimeout(()=> window.location.href = "/logout", 2000);
+
+    } catch {
+      progressWrap.style.display = "none";
+      statusText.innerText = "⚠ Network error";
+      setTimeout(()=> window.location.href = "/logout", 2000);
+    }
+
+  }, "image/jpeg");
+}
+
+retryBtn.addEventListener("click", () => {
+  statusText.innerText = "Retrying...";
+  captureAndSendOnce();
+});
+
+setTimeout(() => window.location.href = "/logout", 30000);
+</script>
+{% endif %}
+<!-- FOOTER -->
+<footer style="
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 1px 0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(2px);
+    color: #fff;
+    font-size: 8px;
+">
+    © <a href="https://www.pravarainfotech.in/" 
+         target="_blank"
+         style="color: #ffd6ff; text-decoration:none; font-weight:600;">
+        pravarainfotech.in
+    </a>
+</footer>
+
+</body>
+</html>

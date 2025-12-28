@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Students Panel</title>
+
+<style>
+body { font-family: Arial; background:#f6f1ff; padding:20px; }
+h1 { color:#6a0dad; text-align:center; }
+table { width:100%; border-collapse: collapse; margin-top:20px; }
+th, td { padding:12px; border:1px solid #b287f5; text-align:center; }
+th { background:#6a0dad; color:white; }
+td button { padding:6px 10px; cursor:pointer; border:none; border-radius:4px; }
+.edit-btn { background:#5154e2; color:white; }
+.report-btn { background:#9c27b0; color:white; }
+.count-btn { background:#380941; color:white; }
+.calendar-btn { background:#7a0f71; color:white; }
+.delete-btn { background:#d42525; color:white; }
+a button { background:#6a0dad; color:white; padding:8px 14px; border-radius:4px; }
+</style>
+</head>
+
+<body>
+
+<h1>📌 Student Management Panel</h1>
+<a href="/admin"><button>⬅ Back to Admin Panel</button></a>
+<a href="/download_all_attendance">
+  <button style="padding:8px 14px; background:#29c55d; color:white; border:none; border-radius:5px; cursor:pointer;">
+    ⬇ Download All Students Data
+  </button>
+</a>
+<br><br>
+
+  </button>
+</a>
+<br><br>
+<table>
+  <tr>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Edit</th>
+    <th>Report</th>
+    <th>Count</th>
+    <th>Calendar</th>
+    <th>Delete</th>
+  </tr>
+
+  {% for s in students %}
+  <tr>
+    <td>{{ s.username }}</td>
+    <td>{{ s.email }}</td>
+
+    <td>
+      <a href="/edit_student/{{ s.email }}">
+        <button class="edit-btn">Edit</button>
+      </a>
+    </td>
+
+    <td>
+      <a href="/attendance_report/{{ s.email }}">
+        <button class="report-btn">Report</button>
+      </a>
+    </td>
+
+    <td>
+      <a href="/attendance_count/{{ s.email }}">
+        <button class="count-btn">Count</button>
+      </a>
+    </td>
+
+    <td>
+      <a href="/attendance_calendar/{{ s.email }}">
+        <button class="calendar-btn">Calendar</button>
+      </a>
+    </td>
+
+    <td>
+      <button class="delete-btn" onclick="deleteStudent('{{ s.email }}')">
+        Delete
+      </button>
+  </tr>
+  {% endfor %}
+</table>
+
+<script>
+function deleteStudent(email) {
+  if (!confirm("⚠ Are you sure you want to delete this student?\nAll attendance records will also be deleted!")) return;
+
+  fetch(`/delete_student/${email}`, { method: "POST" })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        alert("Student deleted successfully!");
+        window.location.reload();
+      } else {
+        alert("Delete failed: " + data.message);
+      }
+    })
+    .catch(err => {
+      alert("Network error!");
+      console.error(err);
+    });
+}
+</script>
+<!-- FOOTER -->
+<footer style="
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 13px;
+">
+    © <a href="https://www.pravarainfotech.in/" 
+         target="_blank"
+         style="color: #380e38; text-decoration:none; font-weight:600;">
+        pravarainfotech.in
+    </a>
+</footer>
+
+</body>
+</html>
