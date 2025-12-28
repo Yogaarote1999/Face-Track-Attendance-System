@@ -76,3 +76,33 @@ http://127.0.0.1:5000
 
 ## Contribution
 Feel free to fork, enhance, and submit pull requests.
+
+## Screenshots
+
+### Dashboard
+![Dashboard]([Dashboard]Screenshot%20(9).png)
+
+### Login Page
+![Login Page]([Login%20Page]Screenshot%20(2).png)
+
+### Registration Page
+![Registration Page]([Registration%20Page]Screenshot%20(3).png)
+
+### Student Management Panel
+![Student Management Panel]([Student%20Management%20panel]Screenshot%20(5).png)
+
+### Attendance Report
+![Attendance Report]([Attendance%20Report]Screenshot%20(6).png)
+
+### Attendance Calendar
+![Attendance Calendar]([Attendance%20Calender]Screenshot%20(8).png)
+
+### Attendance Count
+![Attendance Count]([Attendance%20Count]Screenshot%20(7).png)
+
+### Admin Attendance Panel
+![Admin Panel]([Admin%20Attendace%20Panel]Screenshot%20(4).png)
+
+### Edit Student
+![Edit Student]([Edit%20Student]Screenshot%20(1).png)
+
