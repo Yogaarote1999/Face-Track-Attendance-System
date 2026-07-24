@@ -79,8 +79,6 @@ Feel free to fork, enhance, and submit pull requests.
 
 ## Screenshots
 
-## Screenshots
-
 ### Login Page
 ![Login](Screenshots/Login%20Page%20page.png)
 
